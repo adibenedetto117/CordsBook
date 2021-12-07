@@ -75,7 +75,7 @@ public class SaveCordsCommand implements CommandExecutor {
         		 }
         	
         	 } else {
-                 System.out.println("You cannot use this command through console!");
+        		 sender.sendMessage(ChatColor.RED + "Must be a player to use this command!");
              }
         } 
         

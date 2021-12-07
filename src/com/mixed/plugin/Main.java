@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
         getCommand("lic").setExecutor(new listCommand());
         getCommand("remove").setExecutor(new removeCommand());
         getCommand("toggle").setExecutor(new ToggleListener());
-        //Bukkit.getPluginManager().registerEvents(new ToggleListener(), this);
+        
     }
 
     @Override

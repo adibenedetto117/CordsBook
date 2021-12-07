@@ -10,3 +10,5 @@ commands:
     description: lists all your saved cords
   remove:
     description: <name> removes a loction from your list
+  toggle:
+  

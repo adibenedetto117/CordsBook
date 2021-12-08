@@ -1,6 +1,6 @@
 name: CordsBook
 main: com.mixed.plugin.Main
-version: 1.1
+version: 1.2
 author: Mixed
 description: CordsBook
 commands:
@@ -11,4 +11,6 @@ commands:
   remove:
     description: <name> removes a loction from your list
   toggle:
-  
+    description: <name> toggle cords display
+  toggle off:
+    description: toggles off the scoreboard

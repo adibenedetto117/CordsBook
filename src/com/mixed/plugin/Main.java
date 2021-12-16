@@ -7,21 +7,31 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin{
 	ArrayList<Player> toggled = new ArrayList<>();
 	int temp = 0;
+	Scoreboard board;
+	Objective obj;
+	
     @Override
     public void onEnable() {
         System.out.println("CordsBook has been enabled.");
+        
+        //Bukkit.getPluginManager().registerEvents(this, this);
         
         getCommand("sc").setExecutor(new SaveCordsCommand());
         getCommand("lic").setExecutor(new listCommand());
@@ -39,11 +49,11 @@ public class Main extends JavaPlugin {
     	
     }
     
-
+   
 public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		Player player = (Player) sender;
-		Scoreboard board;
+		
 		File f = new File(player.getName()+".txt");
 		String line;
 		int count = 0;
@@ -58,7 +68,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 		if (cmd.getName().equals("toggle")) {
 		try {
 			if(args[0].equalsIgnoreCase("off") && !(toggled.contains(player))) {
-				 player.sendMessage("Theres nothing to toggle off?");
+				 player.sendMessage(ChatColor.RED + "Theres nothing to toggle off?");
 				 track = 1;
 			}
 			 if (toggled.contains(player) ) {
@@ -128,15 +138,17 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 			
 			 
 			 player.sendMessage("Toggle on");
-			 
+			 temp = 1;
 			 board = Bukkit.getScoreboardManager().getNewScoreboard();
-			 Objective obj = board.registerNewObjective("test", "dummy");
+			 obj = board.registerNewObjective("test", "dummy");
 			 obj.setDisplayName(ChatColor.RED.toString() + dis);
 			 obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+			 
+			
 			 Score cords = obj.getScore(ChatColor.YELLOW + whole );
 			 cords.setScore(1);
 			 player.setScoreboard(board);
-			 temp = 1;
+			 
 			 
 			 toggled.add(player);
 			 return true;
@@ -149,5 +161,28 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 		}
 		return false;
 		
+		
 	}
+@EventHandler
+	public void onMove(PlayerMoveEvent e) {
+	
+   	Player player =	e.getPlayer();
+   	Location loc = player.getLocation();
+   	double x = loc.getBlockX();
+   	double y = loc.getBlockY();
+   	double z = loc.getBlockZ();
+   	
+   
+   	String total = "X"+String.valueOf(x)+" Y"+String.valueOf(y)+" Z"+String.valueOf(z);
+   	if (temp == 1) {
+	    Team bb = board.registerNewTeam("current");
+		 bb.addEntry(ChatColor.AQUA.toString());
+		 bb.setPrefix("CurrentCords: ");
+		 bb.setSuffix(ChatColor.RED + total);
+		 obj.getScore(ChatColor.AQUA.toString()).setScore(3);
+	   	}
+   	
+		
+	}
+		
 }
